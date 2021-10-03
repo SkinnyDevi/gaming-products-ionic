@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
     <ion-toolbar>
         <ion-title>
-            Bicycles
+            Gaming Product Shops
         </ion-title>
     </ion-toolbar>
 </ion-header>
@@ -13,7 +13,7 @@
         </ion-toolbar>
     </ion-header>
 
-    <div id="container">
+    <!-- <div id="container">
         <h1 class="bold">Gaming Products</h1>
         <div *ngFor="let p of products">
             <p>{{p.product_name}}, {{p.price}}€, Stock: {{p.stock}}
@@ -21,12 +21,17 @@
             </p>
         </div>
 
-        <!-- <ion-button color="primary" (click)="goToOtherPage()">Go To Other Page</ion-button> -->
+        <!-- <ion-button color="primary" (click)="goToOtherPage()">Go To Other Page</ion-button>
         <ion-button color="warning" (click)="addProduct()">Add Product (JSON)</ion-button>
         <ion-button color="success" (click)="updateGStockProduct(product.id)">Update Product</ion-button>
 
         <h1 *ngIf="product !== null" class="bold">Products By ID {{product.id}}</h1>
         <h1 *ngIf="product === null">Product By ID Not Found</h1>
         <p *ngIf="product">{{product.product_name}}, {{product.price}}, Stock: {{product.stock}}</p>
+    </div> -->
+    <div class="container">
+        <div *ngFor="let product of products">
+            <app-product-cards></app-product-cards>
+        </div>
     </div>
 </ion-content>
