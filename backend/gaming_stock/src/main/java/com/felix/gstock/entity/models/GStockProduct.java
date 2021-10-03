@@ -32,19 +32,19 @@ public class GStockProduct implements Serializable {
 	
 	public GStockProduct() {}
 
-	public long getProductId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setProductId(long productId) {
-		this.id = productId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
-	public String getproduct_name() {
+	public String getProduct_name() {
 		return product_name;
 	}
 
-	public void setproduct_name(String product_name) {
+	public void setProduct_name(String product_name) {
 		this.product_name = product_name;
 	}
 

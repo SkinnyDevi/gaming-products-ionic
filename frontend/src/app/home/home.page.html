@@ -14,20 +14,19 @@
     </ion-header>
 
     <div id="container">
-        <h1 class="bold">Bikes</h1>
-        <div *ngFor="let b of bicycles">
-            <p>{{b.model}}, {{b.creation_year}}
-                <ion-button color="danger" (click)="deleteBicycle(b.id)">Delete Bicycle</ion-button>
+        <h1 class="bold">Gaming Products</h1>
+        <div *ngFor="let p of products">
+            <p>{{p.product_name}}, {{p.price}}€, Stock: {{p.stock}}
+                <ion-button color="danger" (click)="deleteProduct(p.id)">Delete Product</ion-button>
             </p>
         </div>
 
-        <ion-button color="primary" (click)="goToOtherPage()">Go To Other Page</ion-button>
-        <ion-button color="secondary" (click)="addBicycle()">Add Bicycle</ion-button>
-        <ion-button color="warning" (click)="addBicycleJSON()">Add Bicycle (JSON)</ion-button>
-        <ion-button color="success" (click)="updateBicycle(bike.id)">Update Bicycle</ion-button>
+        <!-- <ion-button color="primary" (click)="goToOtherPage()">Go To Other Page</ion-button> -->
+        <ion-button color="warning" (click)="addProduct()">Add Product (JSON)</ion-button>
+        <ion-button color="success" (click)="updateGStockProduct(product.id)">Update Product</ion-button>
 
-        <h1 *ngIf="bike !== null" class="bold">Bike By Id {{bike.id}}</h1>
-        <h1 *ngIf="bike === null">Bike By Id Not Found</h1>
-        <p *ngIf="bike">{{bike.model}}, {{bike.creation_year}}</p>
+        <h1 *ngIf="product !== null" class="bold">Products By ID {{product.id}}</h1>
+        <h1 *ngIf="product === null">Product By ID Not Found</h1>
+        <p *ngIf="product">{{product.product_name}}, {{product.price}}, Stock: {{product.stock}}</p>
     </div>
 </ion-content>

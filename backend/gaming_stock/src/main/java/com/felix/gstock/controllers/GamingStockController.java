@@ -61,8 +61,16 @@ public class GamingStockController {
 	}
 	
 	@PutMapping(value = dbRoot+"/{id}", consumes = "application/json")
-	private void update(GStockProduct product, @PathVariable("id") long productId) {
-		gstockService.update(product, productId);
+	private void update(@RequestBody String jsonUpdatedProduct, @PathVariable("id") long productId) {
+		ObjectMapper om = new ObjectMapper();
+		try {
+			GStockProduct product = om.readValue(jsonUpdatedProduct, GStockProduct.class);
+			gstockService.update(product, productId);
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

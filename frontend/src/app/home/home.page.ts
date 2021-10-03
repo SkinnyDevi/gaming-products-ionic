@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Bicycle } from "../models/bicycle";
-import { BicycleService } from "../services/bicycle.service";
+import { GStockProduct } from '../models/gstockproduct';
+import { GStockProductService } from '../services/gstockproduct.service';
 
 @Component({
   selector: 'app-home',
@@ -10,65 +10,54 @@ import { BicycleService } from "../services/bicycle.service";
 })
 export class HomePage implements OnInit {
 
-  public bikeID: number = 2;
+  public productID: number = 1;
 
-	public bicycles: Array<Bicycle> = [];
-	public bike: Bicycle = new Bicycle();
-  public uBike: Bicycle = new Bicycle();
+  public products: Array<GStockProduct> = [];
+	public product: GStockProduct = new GStockProduct();
+  public updateProduct: GStockProduct = new GStockProduct();
 
-  constructor(private router: Router, private bicycleService: BicycleService) {}
+  constructor(private router: Router, private gstockService: GStockProductService) {}
 
-	ngOnInit(): void {
-		this.loadInfo()
-	}
+  ngOnInit(): void {
+    this.loadInfo();
+  }
 
-	loadInfo() {
-		this.bicycleService.getBicycles().subscribe((b: Array<Bicycle>) => {
-			this.bicycles = b;
+  loadInfo() {
+		this.gstockService.getProducts().subscribe((p: Array<GStockProduct>) => {
+			this.products = p;
 		})
 
-		this.bicycleService.getBicycleById(this.bikeID).subscribe((b: Bicycle) => {
-			this.bike = b;
+		this.gstockService.getProductById(this.productID).subscribe((p: GStockProduct) => {
+			this.product = p;
 		})
 	}
 
-	goToOtherPage() {
-		this.router.navigateByUrl("/other-page");
-	}
-
-	addBicycle(){
-    console.log("addBicycle")
-    const b: Bicycle = { id: 0, model: "Bianci", creation_year: 2020 };
-    this.bicycleService.addBicycle(b).subscribe(() => {
+  addProduct(){
+    console.log("addProduct")
+    const p: GStockProduct = {id: 0, product_name: "Mouse G-Lab", stock: 5, price: 13.99};
+    this.gstockService.addProductUsingJSON(p).subscribe(() => {
 			this.loadInfo()
 		});
   }
 
-	addBicycleJSON(){
-    console.log("addBicycleJSON")
-    const b: Bicycle = { id: 0, model: "Canondale", creation_year: 2015 };
-    this.bicycleService.addBicycleUsingJSON(b).subscribe(() => {
-			this.loadInfo()
-		});
-  }
-
-	deleteBicycle(idBicycle: number){
-		console.log("deleteBicycle")
-		this.bicycleService.deleteBicycle(idBicycle).subscribe(() => {
+  deleteProduct(id: number){
+		console.log("deleteProduct")
+		this.gstockService.deleteProduct(id).subscribe(() => {
 			this.loadInfo()
 		});
 	}
 
-  updateBicycle(idBicycle: number){
-    this.bicycleService.getBicycleById(this.bikeID).subscribe((b: Bicycle) => {
-			this.uBike = b;
-      console.log(this.uBike)
-      this.uBike.creation_year = 9999;
-      console.log(this.uBike)
+  updateGStockProduct(id: number){
+    this.gstockService.getProductById(this.productID).subscribe((p: GStockProduct) => {
+			this.updateProduct = p;
+      console.log(this.updateProduct.stock)
+      this.updateProduct.stock = this.updateProduct.stock + 1;
+      console.log(this.updateProduct)
 
-      this.bicycleService.updateBicycle(this.uBike, idBicycle).subscribe(() => {
+      this.gstockService.updateProduct(this.updateProduct, id).subscribe(() => {
         this.loadInfo();
       });
 		});
 	}
+
 }
