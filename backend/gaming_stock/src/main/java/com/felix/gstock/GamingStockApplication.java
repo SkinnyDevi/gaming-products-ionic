@@ -1,13 +1,13 @@
-package com.felix.bicycles;
+package com.felix.gstock;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BicyclesIonicPGLApplication {
+public class GamingStockApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BicyclesIonicPGLApplication.class, args);
+		SpringApplication.run(GamingStockApplication.class, args);
 	}
 
 }

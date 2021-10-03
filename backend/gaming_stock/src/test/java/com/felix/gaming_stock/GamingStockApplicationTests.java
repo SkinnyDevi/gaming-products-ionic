@@ -1,10 +1,10 @@
-package org.tiburcio.superbikes;
+package com.felix.gaming_stock;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BicyclesIonicPGLApplicationTests {
+class GamingStockApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,4 +1,4 @@
-package com.felix.bicycles.controllers;
+package com.felix.gstock.controllers;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,43 +16,38 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.felix.bicycles.entity.models.Bicycle;
-import com.felix.bicycles.entity.services.IBicycleService;
+import com.felix.gstock.entity.models.GStockProduct;
+import com.felix.gstock.entity.services.IGStockService;
 
 @CrossOrigin(origins = "http://localhost:8100")
 @RestController
-public class BicycleController {
+public class GamingStockController {
 	
-	final String dbRoot = "/db_bicycles";
+	final String dbRoot = "/db_gaming_stock";
 	
 	@Autowired
-	IBicycleService bicycleService;
+	IGStockService gstockService;
 	
 	@GetMapping(dbRoot)
-	private List<Bicycle> getAll(){
-		return bicycleService.getAll();
+	private List<GStockProduct> getAll(){
+		return gstockService.getAll();
 	}
 	
 	@GetMapping(dbRoot+"/{id}")
-	private Bicycle getOne(@PathVariable("id") long id) {
-		Optional<Bicycle> b = bicycleService.getOne(id);
-		if (b.isPresent()) {
-			return b.get();
+	private GStockProduct getOne(@PathVariable("id") long productId) {
+		Optional<GStockProduct> product = gstockService.getOne(productId);
+		if (product.isPresent()) {
+			return product.get();
 		}
 		return null;
 	}
-
-	@PostMapping(value = dbRoot, consumes = "application/x-www-form-urlencoded")
-	private void add(Bicycle bicycle) {
-		bicycleService.add(bicycle);
-	}
 	
 	@PostMapping(value = dbRoot, consumes = "application/json")
-	private void addUsingJson(@RequestBody String jsonBicycle) {
+	private void addUsingJson(@RequestBody String jsonProduct) {
 		ObjectMapper om = new ObjectMapper();
 		try {
-			Bicycle bicycle = om.readValue(jsonBicycle, Bicycle.class);
-			bicycleService.add(bicycle);
+			GStockProduct product = om.readValue(jsonProduct, GStockProduct.class);
+			gstockService.add(product);
 		} catch (JsonMappingException e) {
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
@@ -62,12 +57,12 @@ public class BicycleController {
 	
 	@DeleteMapping(dbRoot+"/{id}")
 	private void delete(@PathVariable("id") long id) {
-		bicycleService.delete(id);
+		gstockService.delete(id);
 	}
 	
-	@PutMapping(value = dbRoot+"/{id}", consumes = "application/x-www-form-urlencoded")
-	private void update(Bicycle bicycle, @PathVariable("id") long id) {
-		bicycleService.update(bicycle, id);
+	@PutMapping(value = dbRoot+"/{id}", consumes = "application/json")
+	private void update(GStockProduct product, @PathVariable("id") long productId) {
+		gstockService.update(product, productId);
 	}
 	
 }
