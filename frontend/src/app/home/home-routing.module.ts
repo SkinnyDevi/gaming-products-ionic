@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: HomePage,
+  },
+  {
+    path: 'all-products',
+    loadChildren: () => import('../all-products/all-products.module').then( m => m.AllProductsPageModule)
   }
 ];
 

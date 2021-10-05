@@ -9,55 +9,74 @@ import { GStockProductService } from '../services/gstockproduct.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-
   public productID: number = 1;
 
   public products: Array<GStockProduct> = [];
-	public product: GStockProduct = new GStockProduct();
+  public product: GStockProduct = new GStockProduct();
   public updateProduct: GStockProduct = new GStockProduct();
 
-  constructor(private router: Router, private gstockService: GStockProductService) {}
+  constructor(
+    private router: Router,
+    private gstockService: GStockProductService
+  ) {}
 
   ngOnInit(): void {
     this.loadInfo();
   }
 
-  loadInfo() {
-		this.gstockService.getProducts().subscribe((p: Array<GStockProduct>) => {
-			this.products = p;
-		})
-
-		this.gstockService.getProductById(this.productID).subscribe((p: GStockProduct) => {
-			this.product = p;
-		})
-	}
-
-  addProduct(){
-    console.log("addProduct")
-    const p: GStockProduct = {id: 0, product_name: "Mouse G-Lab", stock: 5, price: 13.99};
-    this.gstockService.addProductUsingJSON(p).subscribe(() => {
-			this.loadInfo()
-		});
+  goToAllProducts(): void {
+    this.router.navigateByUrl("/all-products")
   }
 
-  deleteProduct(id: number){
-		console.log("deleteProduct")
-		this.gstockService.deleteProduct(id).subscribe(() => {
-			this.loadInfo()
-		});
-	}
+  loadInfo() {
+    this.gstockService.getProducts().subscribe((p: Array<GStockProduct>) => {
+      this.products = p;
+    });
 
-  updateGStockProduct(id: number){
-    this.gstockService.getProductById(this.productID).subscribe((p: GStockProduct) => {
-			this.updateProduct = p;
-      console.log(this.updateProduct.stock)
-      this.updateProduct.stock = this.updateProduct.stock + 1;
-      console.log(this.updateProduct)
-
-      this.gstockService.updateProduct(this.updateProduct, id).subscribe(() => {
-        this.loadInfo();
+    this.gstockService
+      .getProductById(this.productID)
+      .subscribe((p: GStockProduct) => {
+        this.product = p;
       });
-		});
-	}
+  }
 
+  addProduct() {
+    console.log('addProduct');
+    const p: GStockProduct = {
+      id: 0,
+      product_name: 'Mouse G-Lab',
+      product_desc: '4800 DPI and high precision with multiple buttons',
+      img_url:
+        'https://media.ldlc.com/r1600/ld/products/00/05/38/39/LD0005383977_2.jpg',
+      stock: 5,
+      price: 13.99,
+    };
+    this.gstockService.addProductUsingJSON(p).subscribe(() => {
+      this.loadInfo();
+    });
+  }
+
+  deleteProduct(id: number) {
+    console.log('deleteProduct');
+    this.gstockService.deleteProduct(id).subscribe(() => {
+      this.loadInfo();
+    });
+  }
+
+  updateGStockProduct(id: number) {
+    this.gstockService
+      .getProductById(this.productID)
+      .subscribe((p: GStockProduct) => {
+        this.updateProduct = p;
+        console.log(this.updateProduct.stock);
+        this.updateProduct.stock = this.updateProduct.stock + 1;
+        console.log(this.updateProduct);
+
+        this.gstockService
+          .updateProduct(this.updateProduct, id)
+          .subscribe(() => {
+            this.loadInfo();
+          });
+      });
+  }
 }
