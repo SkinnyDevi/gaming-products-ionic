@@ -9,6 +9,6 @@ public interface IGStockService {
 	Optional<GStockProduct> getOne(long productId);
 	List<GStockProduct> getAll();
 	void add(GStockProduct GStock);
-	void delete(long idBicycle);
-	void update(GStockProduct bicycle, long productId);
+	void delete(long productId);
+	void update(GStockProduct product, long productId);
 }

@@ -19,13 +19,17 @@ public class GStockProduct implements Serializable {
 	long id;
 	
 	String product_name;
+	String product_desc;
+	String img_url;
 	int stock;
 	double price;
 	
-	public GStockProduct(long id, String product_name, int stock, double price) {
+	public GStockProduct(long id, String product_name, String product_desc, String img_url, int stock, double price) {
 		super();
 		this.id = id;
 		this.product_name = product_name;
+		this.product_desc = product_desc;
+		this.img_url = img_url;
 		this.stock = stock;
 		this.price = price;
 	}
@@ -46,6 +50,22 @@ public class GStockProduct implements Serializable {
 
 	public void setProduct_name(String product_name) {
 		this.product_name = product_name;
+	}
+	
+	public String getProduct_desc() {
+		return product_desc;
+	}
+
+	public void setProduct_desc(String product_desc) {
+		this.product_desc = product_desc;
+	}
+	
+	public String getImg_url() {
+		return img_url;
+	}
+
+	public void setImg_url(String img_url) {
+		this.img_url = img_url;
 	}
 
 	public int getStock() {
