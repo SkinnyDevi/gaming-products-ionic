@@ -4,4 +4,24 @@
         --max-width: 400px;
         --width: 400px;
     }
+    .update-alert .alert-wrapper {
+        --min-width: 400px;
+        --max-width: 900px;
+        --width: 900px;
+        font-size: 25px;
+    }
+}
+
+.container {
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 20px;
+}
+
+.container strong {
+    font-size: 50px;
+    line-height: 50px;
+    text-decoration: underline;
 }

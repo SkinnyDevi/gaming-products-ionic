@@ -10,24 +10,29 @@ import { GStockProductService } from 'app/services/gstockproduct.service';
   styleUrls: ['./manage-products.page.scss'],
 })
 export class ManageProductsPage implements OnInit {
-
   public products: Array<GStockProduct> = [];
   public product: GStockProduct = new GStockProduct();
+  public imgRegexString: string = '(https?://[^ ]*.(?:png|jpg|jpeg|svg))';
+  public imgRegex: RegExp = new RegExp(this.imgRegexString);
 
-  constructor(private router: Router, private gstockService: GStockProductService, public alertController: AlertController) { }
+  constructor(
+    private router: Router,
+    private gstockService: GStockProductService,
+    public alertController: AlertController
+  ) {}
 
   ngOnInit() {
     this.loadInfo();
   }
 
   goToAllProducts(): void {
-    this.router.navigateByUrl("/all-products").then(() => {
+    this.router.navigateByUrl('/all-products').then(() => {
       window.location.reload();
     });
   }
 
   goToAddProducts(): void {
-    this.router.navigateByUrl("/add-products").then(() => {
+    this.router.navigateByUrl('/add-products').then(() => {
       window.location.reload();
     });
   }
@@ -48,7 +53,7 @@ export class ManageProductsPage implements OnInit {
   async deleteAlert(product: GStockProduct) {
     const alert = await this.alertController.create({
       header: 'Delete Product',
-      message: 'Are you sure you want to delete '+product.product_name+'?',
+      message: 'Are you sure you want to delete ' + product.product_name + '?',
       buttons: [
         {
           text: 'Cancel',
@@ -56,14 +61,15 @@ export class ManageProductsPage implements OnInit {
           cssClass: 'secondary',
           handler: (cancel) => {
             return cancel;
-          }
-        }, {
+          },
+        },
+        {
           text: 'Delete',
           handler: () => {
             this.deleteProduct(product.id);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
 
     await alert.present();
@@ -72,6 +78,8 @@ export class ManageProductsPage implements OnInit {
   async updateAlert(product: GStockProduct) {
     const alert = await this.alertController.create({
       header: 'Update Product',
+      subHeader: 'Change the fields you wish to update',
+      cssClass: 'update-alert',
       inputs: [
         {
           name: 'product_name',
@@ -97,7 +105,10 @@ export class ManageProductsPage implements OnInit {
           name: 'price',
           placeholder: 'Price',
           value: product.price,
-        }
+          attributes: {
+            maxlength: 6,
+          },
+        },
       ],
       buttons: [
         {
@@ -106,15 +117,72 @@ export class ManageProductsPage implements OnInit {
           cssClass: 'secondary',
           handler: (cancel) => {
             return cancel;
-          }
-        }, {
+          },
+        },
+        {
           text: 'Update',
-          handler: (updatedProduct) => {
-            //this.deleteProduct(product.id);
-            console.log("update TODO");
-            console.log(updatedProduct);
+          handler: (productToUpdate) => {
+            const updatedProduct: GStockProduct = {
+              id: product.id,
+              product_name: productToUpdate.product_name,
+              product_desc: productToUpdate.product_desc,
+              img_url: productToUpdate.img_url,
+              stock: productToUpdate.stock,
+              price: productToUpdate.price,
+            };
             this.updateValidator(updatedProduct);
-          }
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  updateValidator(product: GStockProduct) {
+    let name = product.product_name;
+    let desc = product.product_desc;
+    let stock = product.stock;
+    let img_url = product.img_url;
+    let price = product.price;
+
+    let valid: boolean = true;
+
+    if (name === null || name === '') {
+      valid = false;
+    }
+
+    if (desc === null || desc === '') {
+      valid = false;
+    }
+
+    if (stock === null || stock < 5) {
+      valid = false;
+    }
+
+    if (img_url === null || img_url === '' || !this.imgRegex.test(img_url)) {
+      valid = false;
+    }
+
+    if (price === null || price === '') {
+      valid = false;
+    }
+
+    if (!valid) {
+      this.updateFailed();
+    } else {
+      this.updateGStockProduct(product.id, product);
+    }
+  }
+
+  async updateFailed() {
+    const alert = await this.alertController.create({
+      header: 'Product Update Failed',
+      message: 'Provided information does not meet with default minimum product requirements.',
+      buttons: [
+        {
+          text: 'Review Product',
+          handler: () => {}
         }
       ]
     });
@@ -122,7 +190,11 @@ export class ManageProductsPage implements OnInit {
     await alert.present();
   }
 
-  updateValidator(product: GStockProduct) {
-
+  updateGStockProduct(id: number, updatedProduct: GStockProduct) {
+    this.gstockService.getProductById(id).subscribe(() => {
+      this.gstockService.updateProduct(updatedProduct, id).subscribe(() => {
+        this.loadInfo();
+      });
+    });
   }
 }

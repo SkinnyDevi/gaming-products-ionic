@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
+import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { GStockProduct } from 'app/models/gstockproduct';
+import { GStockProductService } from 'app/services/gstockproduct.service';
 
 @Component({
   selector: 'app-add-products',
@@ -10,10 +12,12 @@ import { GStockProduct } from 'app/models/gstockproduct';
 })
 export class AddProductsPage implements OnInit {
 
-  public formData: FormGroup;
+  public additionForm: FormGroup;
   public previewProduct: GStockProduct;
+  public imgRegexString: string = '(https?:\/\/[^ ]*\.(?:png|jpg|jpeg|svg))'
+  public imgRegex: RegExp = new RegExp(this.imgRegexString);
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private alertController: AlertController, private gstockService: GStockProductService) {
     this.previewProduct = {
       id: 0,
       product_name: 'Sample Product',
@@ -21,17 +25,17 @@ export class AddProductsPage implements OnInit {
       img_url:
         '../../assets/img/sample.jpg',
       stock: 5,
-      price: "13.99",
+      price: "4.99",
     };
   }
 
   ngOnInit() {
-    this.formData = new FormGroup({
+    this.additionForm = new FormGroup({
       product_name: new FormControl('Sample Product', Validators.required),
       product_desc: new FormControl('A very good description indeed.', Validators.required),
       stock: new FormControl(0, Validators.min(5)),
-      img_url: new FormControl('', [Validators.pattern('(https?:\/\/[^ ]*\.(?:gif|png|jpg|jpeg))'), Validators.required]),
-      price: new FormControl('4.99', Validators.required),
+      img_url: new FormControl('', [Validators.pattern(this.imgRegexString), Validators.required]),
+      price: new FormControl('4.99', [Validators.required, Validators.maxLength(6)]),
     });
   }
 
@@ -48,7 +52,7 @@ export class AddProductsPage implements OnInit {
   }
 
   onPreview() {
-    let formReturn = this.formData.value;
+    let formReturn = this.additionForm.value;
 
     let name = formReturn.product_name;
     let desc = formReturn.product_desc;
@@ -68,8 +72,10 @@ export class AddProductsPage implements OnInit {
       stock = 5;
     }
 
-    if (img_url === null || img_url === '') {
-      img_url = '../../assets/img/sample.jpg';
+    if (img_url === null || img_url === '' || !this.imgRegex.test(img_url)) {
+      console.log(this.imgRegex.test(img_url))
+      console.log(img_url)
+      img_url = '../../assets/img/imgNotFound.jpg';
     }
 
     if (price === null || price === '') {
@@ -84,5 +90,64 @@ export class AddProductsPage implements OnInit {
       img_url: img_url,
       price: price
     };
+  }
+
+  onAddition() {
+    let formReturn = this.additionForm.value;
+
+    let name = formReturn.product_name;
+    let desc = formReturn.product_desc;
+    let stock = formReturn.stock;
+    let img_url = formReturn.img_url;
+    let price = formReturn.price;
+
+    let valid: boolean = true;
+
+    if (name === null || name === '') {
+      valid = false;
+    }
+
+    if (desc === null || desc === '') {
+      valid = false;
+    }
+
+    if (stock === null || stock === '' || stock < 5) {
+      valid = false;
+    }
+
+    if (img_url === null || img_url === '' || !this.imgRegex.test(img_url)) {
+      valid = false;
+    }
+
+    if (price === null || price === '') {
+      valid = false;
+    }
+
+    if (!valid) {
+      this.additionFailed();
+    } else {
+      this.addProduct(formReturn);
+    }
+  }
+
+  async additionFailed() {
+    const alert = await this.alertController.create({
+      header: 'Addition Failed',
+      message: 'Provided information does not meet with default minimum product requirements.',
+      buttons: [
+        {
+          text: 'Review Product',
+          handler: () => {}
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  addProduct(product: GStockProduct) {
+    this.gstockService.addProductUsingJSON(product).subscribe(() => {
+      this.router.navigateByUrl('/all-products');
+    });
   }
 }

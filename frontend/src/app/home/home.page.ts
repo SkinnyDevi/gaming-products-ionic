@@ -67,44 +67,4 @@ export class HomePage implements OnInit {
       this.products = p;
     });
   }
-
-  addProduct() {
-    console.log('addProduct');
-    const p: GStockProduct = {
-      id: 0,
-      product_name: 'Mouse G-Lab',
-      product_desc: '4800 DPI and high precision with multiple buttons',
-      img_url:
-        'https://media.ldlc.com/r1600/ld/products/00/05/38/39/LD0005383977_2.jpg',
-      stock: 5,
-      price: "13.99",
-    };
-    this.gstockService.addProductUsingJSON(p).subscribe(() => {
-      this.loadInfo();
-    });
-  }
-
-  deleteProduct(id: number) {
-    console.log('deleteProduct');
-    this.gstockService.deleteProduct(id).subscribe(() => {
-      this.loadInfo();
-    });
-  }
-
-  updateGStockProduct(id: number) {
-    this.gstockService
-      .getProductById(this.productID)
-      .subscribe((p: GStockProduct) => {
-        this.updateProduct = p;
-        console.log(this.updateProduct.stock);
-        this.updateProduct.stock = this.updateProduct.stock + 1;
-        console.log(this.updateProduct);
-
-        this.gstockService
-          .updateProduct(this.updateProduct, id)
-          .subscribe(() => {
-            this.loadInfo();
-          });
-      });
-  }
 }
