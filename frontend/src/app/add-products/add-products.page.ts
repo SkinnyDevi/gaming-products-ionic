@@ -21,7 +21,7 @@ export class AddProductsPage implements OnInit {
       img_url:
         '../../assets/img/sample.jpg',
       stock: 5,
-      price: 13.99,
+      price: "13.99",
     };
   }
 
@@ -31,7 +31,7 @@ export class AddProductsPage implements OnInit {
       product_desc: new FormControl('A very good description indeed.', Validators.required),
       stock: new FormControl(0, Validators.min(5)),
       img_url: new FormControl('', [Validators.pattern('(https?:\/\/[^ ]*\.(?:gif|png|jpg|jpeg))'), Validators.required]),
-      price: new FormControl(4.99, Validators.required),
+      price: new FormControl('4.99', Validators.required),
     });
   }
 
@@ -73,7 +73,7 @@ export class AddProductsPage implements OnInit {
     }
 
     if (price === null || price === '') {
-      price = 13.99;
+      price = '13.99';
     }
 
     this.previewProduct = {

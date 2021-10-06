@@ -47,7 +47,7 @@ export class AllProductsPage implements OnInit {
       img_url:
         'https://media.ldlc.com/r1600/ld/products/00/05/38/39/LD0005383977_2.jpg',
       stock: 5,
-      price: 13.99,
+      price: "13.99",
     };
     this.gstockService.addProductUsingJSON(p).subscribe(() => {
       this.loadInfo();

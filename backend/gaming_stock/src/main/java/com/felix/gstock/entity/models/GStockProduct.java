@@ -22,9 +22,9 @@ public class GStockProduct implements Serializable {
 	String product_desc;
 	String img_url;
 	int stock;
-	double price;
+	String price;
 	
-	public GStockProduct(long id, String product_name, String product_desc, String img_url, int stock, double price) {
+	public GStockProduct(long id, String product_name, String product_desc, String img_url, int stock, String price) {
 		super();
 		this.id = id;
 		this.product_name = product_name;
@@ -76,11 +76,11 @@ public class GStockProduct implements Serializable {
 		this.stock = stock;
 	}
 
-	public double getPrice() {
+	public String getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(String price) {
 		this.price = price;
 	}
 }

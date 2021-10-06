@@ -4,5 +4,5 @@ export class GStockProduct {
   product_desc: string;
   img_url: string;
 	stock: number;
-  price: number;
+  price: string;
 }

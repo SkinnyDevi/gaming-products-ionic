@@ -22,6 +22,7 @@ public class GStockServiceImpl implements IGStockService {
 	
 	@Override
 	public Optional<GStockProduct> getOne(long productId) {
+		System.out.println(gstockDao.findById(productId).get());
 		return gstockDao.findById(productId);
 	}
 

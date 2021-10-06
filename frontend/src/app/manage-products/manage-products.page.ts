@@ -109,14 +109,20 @@ export class ManageProductsPage implements OnInit {
           }
         }, {
           text: 'Update',
-          handler: () => {
+          handler: (updatedProduct) => {
             //this.deleteProduct(product.id);
-            console.log("update TODO")
+            console.log("update TODO");
+            console.log(updatedProduct);
+            this.updateValidator(updatedProduct);
           }
         }
       ]
     });
 
     await alert.present();
+  }
+
+  updateValidator(product: GStockProduct) {
+
   }
 }

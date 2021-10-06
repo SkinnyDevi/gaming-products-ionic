@@ -8,7 +8,7 @@ create table stock (
     product_desc text null,
     img_url varchar(2038) not null,
 	stock int not null,
-	price int not null
+	price varchar(10) not null
 ) engine=InnoDB;
 
 # drop table stock;
