@@ -20,6 +20,18 @@ export class AllProductsPage implements OnInit {
     this.loadInfo();
   }
 
+  goToAddProducts(): void {
+    this.router.navigateByUrl("/add-products").then(() => {
+      window.location.reload();
+    });
+  }
+
+  goToManageProducts(): void {
+    this.router.navigateByUrl("/manage-products").then(() => {
+      window.location.reload();
+    });
+  }
+
   loadInfo() {
     this.gstockService.getProducts().subscribe((p: Array<GStockProduct>) => {
       this.products = p;

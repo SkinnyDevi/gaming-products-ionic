@@ -37,20 +37,6 @@ export class GStockProductService {
 		return this.httpClient.delete<GStockProduct>(this.endpoint + "/" + id);
 	}
 
-  /*
-  updateProduct(product: GStockProduct, id: number): Observable<GStockProduct> {
-    const encodedBody = new URLSearchParams();
-    encodedBody.append("product_name", product.product_name);
-    encodedBody.append("stock", product.stock.toString());
-    encodedBody.append("price", product.price.toString())
-    const body = encodedBody.toString();
-
-    console.log("updateProduct")
-    console.log(JSON.stringify(product))
-    return this.httpClient.put<GStockProduct>(this.endpoint + "/" + id, body, httpOptionsNative);
-  }
-  */
-
   updateProduct(product: GStockProduct, id: number): Observable<GStockProduct> {
     console.log(JSON.stringify(product));
     return this.httpClient.put<GStockProduct>(this.endpoint + "/" + id, JSON.stringify(product), httpOptionsJSON);

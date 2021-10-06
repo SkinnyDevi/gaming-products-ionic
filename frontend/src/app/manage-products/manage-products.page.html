@@ -1,0 +1,37 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-segment value="manage">
+            <ion-segment-button value="all" (click)="goToAllProducts()">
+                All Products
+            </ion-segment-button>
+            <ion-segment-button value="new" (click)="goToAddProducts()">
+                Add New
+            </ion-segment-button>
+            <ion-segment-button value="manage">
+                Manage
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div class="container">
+        <ion-grid>
+            <ion-row>
+                <ion-col size-lg="3" size-md="4" size-sm="6" size="12" *ngFor="let prod of products">
+                    <app-product-cards [product]="prod"></app-product-cards>
+                    <ion-card>
+                        <ion-item button (click)="deleteAlert(prod)">
+                            <ion-icon name="trash" slot="start"></ion-icon>
+                            <ion-label>Delete Product Card</ion-label>
+                        </ion-item>
+                        <ion-item button (click)="updateAlert(prod)">
+                            <ion-icon name="create-outline" slot="start"></ion-icon>
+                            <ion-label>Edit Product Card</ion-label>
+                        </ion-item>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+</ion-content>

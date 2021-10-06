@@ -4,10 +4,10 @@
             <ion-segment-button value="all" (click)="goToAllProducts()">
                 All Products
             </ion-segment-button>
-            <ion-segment-button value="new">
+            <ion-segment-button value="new" (click)="goToAddProducts()">
                 Add New
             </ion-segment-button>
-            <ion-segment-button value="manage">
+            <ion-segment-button value="manage" (click)="goToManageProducts()">
                 Manage
             </ion-segment-button>
         </ion-segment>
@@ -16,6 +16,7 @@
 
 <ion-content [fullscreen]="true">
     <div class="container">
+        <strong *ngIf="serverNotStarted">YOUR SHIT AINT WORKING</strong>
         <strong>Welcome to Gaming Products in Stock!</strong>
         <br/>
         <p>Start by selecting the tabs above.</p>

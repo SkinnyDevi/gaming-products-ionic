@@ -4,10 +4,10 @@
             <ion-segment-button value="all">
                 All Products
             </ion-segment-button>
-            <ion-segment-button value="new">
+            <ion-segment-button value="new" (click)="goToAddProducts()">
                 Add New
             </ion-segment-button>
-            <ion-segment-button value="manage">
+            <ion-segment-button value="manage" (click)="goToManageProducts()">
                 Manage
             </ion-segment-button>
         </ion-segment>
@@ -25,6 +25,5 @@
                 </ion-row>
             </div>
         </ion-grid>
-        <ion-button color="warning" (click)="addProduct()">Add Product (JSON)</ion-button>
     </div>
 </ion-content>

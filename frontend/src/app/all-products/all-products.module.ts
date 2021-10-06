@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { AllProductsPageRoutingModule } from './all-products-routing.module';
 import { AllProductsPage } from './all-products.page';
-import { ProductCardsComponent } from '../shared/product-cards/product-cards.component'
+import { ProductCardsComponent } from '../shared/product-cards/product-cards.component';
 
 @NgModule({
   imports: [
