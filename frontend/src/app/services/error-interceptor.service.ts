@@ -31,6 +31,7 @@ export class ErrorInterceptorService implements HttpInterceptor {
                       errorMessage = `Error Status: ${error.status}\nMessage: ${error.message}`;
                       console.log("ERROR")
                       this.changeStatus(true);
+                      console.log("ERRORSITO")
                   }
                   return throwError(errorMessage);
               })

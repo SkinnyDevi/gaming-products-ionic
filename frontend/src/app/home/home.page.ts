@@ -34,7 +34,8 @@ export class HomePage implements OnInit {
 
       // Do something after
       this.errorInterceptorService.getStatus().subscribe((stat) => {
-        console.log(stat)
+        console.log("estado servidor: " + stat)
+        this.serverNotStarted = stat;
       })
       console.log('after delay')
   })();
