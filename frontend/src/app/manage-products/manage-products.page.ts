@@ -14,6 +14,8 @@ export class ManageProductsPage implements OnInit {
   public product: GStockProduct = new GStockProduct();
   public imgRegexString: string = '(https?://[^ ]*.(?:png|jpg|jpeg|svg))';
   public imgRegex: RegExp = new RegExp(this.imgRegexString);
+  public static serverNotStarted: boolean;
+  public serverStatus: boolean;
 
   constructor(
     private router: Router,
@@ -22,7 +24,23 @@ export class ManageProductsPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadInfo();
+    (async () => {
+      // Do something before delay
+      this.loadInfoAndServerTester();
+      await this.delay(1000);
+      // Do something after
+      this.serverStatus = ManageProductsPage.serverNotStarted;
+      if (this.serverStatus) {
+        let mainContent = document.getElementById('main-container');
+        mainContent.style.top = '140px';
+      } else {
+        console.log("Server connected");
+      };
+    })();
+  }
+
+  async delay(ms: number) {
+    await new Promise(f => setTimeout(f, ms));
   }
 
   goToAllProducts(): void {
@@ -37,16 +55,15 @@ export class ManageProductsPage implements OnInit {
     });
   }
 
-  loadInfo() {
+  loadInfoAndServerTester() {
     this.gstockService.getProducts().subscribe((p: Array<GStockProduct>) => {
       this.products = p;
     });
   }
 
   deleteProduct(id: number) {
-    console.log('deleteProduct');
     this.gstockService.deleteProduct(id).subscribe(() => {
-      this.loadInfo();
+      this.loadInfoAndServerTester();
     });
   }
 
@@ -156,7 +173,7 @@ export class ManageProductsPage implements OnInit {
       valid = false;
     }
 
-    if (stock === null || stock < 5) {
+    if (stock === null || stock < 0) {
       valid = false;
     }
 
@@ -164,7 +181,7 @@ export class ManageProductsPage implements OnInit {
       valid = false;
     }
 
-    if (price === null || price === '') {
+    if (price === null || price === '' || isNaN(+price)) {
       valid = false;
     }
 
@@ -178,7 +195,7 @@ export class ManageProductsPage implements OnInit {
   async updateFailed() {
     const alert = await this.alertController.create({
       header: 'Product Update Failed',
-      message: 'Provided information does not meet with default minimum product requirements.',
+      message: 'Provided information isn\'t valid to update the product. Please check again.',
       buttons: [
         {
           text: 'Review Product',
@@ -193,7 +210,7 @@ export class ManageProductsPage implements OnInit {
   updateGStockProduct(id: number, updatedProduct: GStockProduct) {
     this.gstockService.getProductById(id).subscribe(() => {
       this.gstockService.updateProduct(updatedProduct, id).subscribe(() => {
-        this.loadInfo();
+        this.loadInfoAndServerTester();
       });
     });
   }

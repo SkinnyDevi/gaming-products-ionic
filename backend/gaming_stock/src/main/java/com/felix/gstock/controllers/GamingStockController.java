@@ -1,6 +1,7 @@
 package com.felix.gstock.controllers;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.felix.gstock.entity.models.GStockProduct;
+import com.felix.gstock.entity.models.exceptions.GSProductNotFoundException;
 import com.felix.gstock.entity.services.IGStockService;
 
 @CrossOrigin(origins = "http://localhost:8100")
@@ -35,9 +37,13 @@ public class GamingStockController {
 	
 	@GetMapping(dbRoot+"/{id}")
 	private GStockProduct getOne(@PathVariable("id") long productId) {
-		Optional<GStockProduct> product = gstockService.getOne(productId);
-		if (product.isPresent()) {
-			return product.get();
+		try {
+			Optional<GStockProduct> product = gstockService.getOne(productId);
+			if (product.isPresent()) {
+				return product.get();
+			} 
+		} catch (NoSuchElementException err) {
+			throw new GSProductNotFoundException("Product not found.");
 		}
 		return null;
 	}

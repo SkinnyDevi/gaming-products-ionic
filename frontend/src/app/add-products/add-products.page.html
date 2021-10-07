@@ -15,7 +15,12 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-    <div class="container">
+    <div class="container" style="top: 100px;">
+        <small *ngIf="serverStatus"><i class="fas fa-exclamation-triangle"></i><br/></small>
+        <small *ngIf="serverStatus">Server has not started.<br/></small>
+        <small *ngIf="serverStatus">If your server is running, reload the page.</small>
+    </div>
+    <div id="main-container" class="container">
         <strong>Add a new Product to the Market</strong>
         <ion-grid>
             <ion-row>

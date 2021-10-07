@@ -12,12 +12,31 @@ export class AllProductsPage implements OnInit {
 
   public products: Array<GStockProduct> = [];
   public product: GStockProduct = new GStockProduct();
+  public static serverNotStarted: boolean;
+  public serverStatus: boolean;
 
   constructor(private router: Router,
     private gstockService: GStockProductService) { }
 
   ngOnInit() {
-    this.loadInfo();
+    (async () => {
+      // Do something before delay
+      this.loadInfoAndServerTester();
+      await this.delay(1000);
+      // Do something after
+      this.serverStatus = AllProductsPage.serverNotStarted;
+      if (this.serverStatus) {
+        let mainContent = document.getElementById('main-container');
+        mainContent.style.top = '190px';
+      } else {
+        console.log("Server connected.");
+      };
+    })();
+
+  }
+
+  async delay(ms: number) {
+    await new Promise(f => setTimeout(f, ms));
   }
 
   goToAddProducts(): void {
@@ -32,26 +51,9 @@ export class AllProductsPage implements OnInit {
     });
   }
 
-  loadInfo() {
+  loadInfoAndServerTester() {
     this.gstockService.getProducts().subscribe((p: Array<GStockProduct>) => {
       this.products = p;
     });
   }
-
-  addProduct() {
-    console.log('addProduct');
-    const p: GStockProduct = {
-      id: 0,
-      product_name: 'Mouse G-Lab',
-      product_desc: '4800 DPI and high precision with multiple buttons',
-      img_url:
-        'https://media.ldlc.com/r1600/ld/products/00/05/38/39/LD0005383977_2.jpg',
-      stock: 5,
-      price: "13.99",
-    };
-    this.gstockService.addProductUsingJSON(p).subscribe(() => {
-      this.loadInfo();
-    });
-  }
-
 }

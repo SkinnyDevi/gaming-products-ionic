@@ -9,6 +9,9 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError, Subject } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { HomePage } from '../home/home.page';
+import { AddProductsPage } from '../add-products/add-products.page';
+import { AllProductsPage } from '../all-products/all-products.page';
+import { ManageProductsPage } from '../manage-products/manage-products.page';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +23,9 @@ export class ErrorInterceptorService implements HttpInterceptor {
     this.serverChange.subscribe((x) => {
       //console.log("HI " + x)
       HomePage.serverNotStarted = x;
+      AddProductsPage.serverNotStarted = x;
+      AllProductsPage.serverNotStarted = x;
+      ManageProductsPage.serverNotStarted = x;
     })
   }
 

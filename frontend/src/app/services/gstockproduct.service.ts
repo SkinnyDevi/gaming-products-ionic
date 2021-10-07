@@ -29,7 +29,6 @@ export class GStockProductService {
 	}
 
 	addProductUsingJSON(product: GStockProduct): Observable<GStockProduct> {
-    console.log(JSON.stringify(product))
     return this.httpClient.post<GStockProduct>(this.endpoint, JSON.stringify(product), httpOptionsJSON);
   }
 
@@ -38,7 +37,6 @@ export class GStockProductService {
 	}
 
   updateProduct(product: GStockProduct, id: number): Observable<GStockProduct> {
-    console.log(JSON.stringify(product));
     return this.httpClient.put<GStockProduct>(this.endpoint + "/" + id, JSON.stringify(product), httpOptionsJSON);
   }
 }

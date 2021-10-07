@@ -11,11 +11,12 @@ import { GStockProductService } from 'app/services/gstockproduct.service';
   styleUrls: ['./add-products.page.scss'],
 })
 export class AddProductsPage implements OnInit {
-
   public additionForm: FormGroup;
   public previewProduct: GStockProduct;
   public imgRegexString: string = '(https?:\/\/[^ ]*\.(?:png|jpg|jpeg|svg))'
   public imgRegex: RegExp = new RegExp(this.imgRegexString);
+  public static serverNotStarted: boolean;
+  public serverStatus: boolean;
 
   constructor(private router: Router, private alertController: AlertController, private gstockService: GStockProductService) {
     this.previewProduct = {
@@ -35,8 +36,31 @@ export class AddProductsPage implements OnInit {
       product_desc: new FormControl('A very good description indeed.', Validators.required),
       stock: new FormControl(0, Validators.min(5)),
       img_url: new FormControl('', [Validators.pattern(this.imgRegexString), Validators.required]),
-      price: new FormControl('4.99', [Validators.required, Validators.maxLength(6)]),
+      price: new FormControl('4.99', [Validators.required, Validators.maxLength(6), Validators.min(0)]),
     });
+
+    (async () => {
+      // Do something before delay
+      this.serverTester();
+      await this.delay(1000);
+      // Do something after
+      this.serverStatus = AddProductsPage.serverNotStarted;
+      if (this.serverStatus) {
+        let mainContent = document.getElementById('main-container');
+        mainContent.style.top = '190px';
+      } else {
+        console.log("Server connected.");
+      };
+    })();
+  }
+
+  serverTester() {
+    this.gstockService.getProducts().subscribe((p) => {
+    });
+  }
+
+  async delay(ms: number) {
+    await new Promise(f => setTimeout(f, ms));
   }
 
   goToAllProducts(): void {
@@ -73,12 +97,10 @@ export class AddProductsPage implements OnInit {
     }
 
     if (img_url === null || img_url === '' || !this.imgRegex.test(img_url)) {
-      console.log(this.imgRegex.test(img_url))
-      console.log(img_url)
       img_url = '../../assets/img/imgNotFound.jpg';
     }
 
-    if (price === null || price === '') {
+    if (price === null || price === '' || isNaN(+price)) {
       price = '13.99';
     }
 
@@ -119,7 +141,7 @@ export class AddProductsPage implements OnInit {
       valid = false;
     }
 
-    if (price === null || price === '') {
+    if (price === null || price === '' || isNaN(+price)) {
       valid = false;
     }
 

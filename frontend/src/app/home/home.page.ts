@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GStockProduct } from '../models/gstockproduct';
 import { GStockProductService } from '../services/gstockproduct.service';
-import { ErrorInterceptorService } from 'app/services/error-interceptor.service';
 
 @Component({
   selector: 'app-home',
@@ -10,13 +9,8 @@ import { ErrorInterceptorService } from 'app/services/error-interceptor.service'
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  public productID: number = 1;
-
   public static serverNotStarted: boolean;
   public serverStatus: boolean;
-  public products: Array<GStockProduct> = [];
-  public product: GStockProduct = new GStockProduct();
-  public updateProduct: GStockProduct = new GStockProduct();
 
   constructor(
     private router: Router,
@@ -26,15 +20,14 @@ export class HomePage implements OnInit {
   ngOnInit(): void {
     (async () => {
       // Do something before delay
-      this.loadInfo();
+      this.serverTester();
       await this.delay(1000);
       // Do something after
       this.serverStatus = HomePage.serverNotStarted;
+      if (!this.serverTester) {
+        console.log("Server connected");
+      }
     })();
-  }
-
-  public static setServerStatus(stat: boolean) {
-    this.serverNotStarted = stat;
   }
 
   async delay(ms: number) {
@@ -59,9 +52,8 @@ export class HomePage implements OnInit {
     });
   }
 
-  loadInfo() {
-    this.gstockService.getProducts().subscribe((p: Array<GStockProduct>) => {
-      this.products = p;
+  serverTester() {
+    this.gstockService.getProducts().subscribe((p) => {
     });
   }
 }
