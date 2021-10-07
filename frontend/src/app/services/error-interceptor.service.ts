@@ -6,14 +6,23 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { Observable, throwError, Subject } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import { HomePage } from '../home/home.page';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ErrorInterceptorService implements HttpInterceptor {
-  public serverError = new BehaviorSubject(false);
+  public serverChange: Subject<boolean> = new Subject<boolean>();
+
+  constructor() {
+    this.serverChange.subscribe((x) => {
+      //console.log("HI " + x)
+      HomePage.serverNotStarted = x;
+    })
+  }
+
   intercept(
       request: HttpRequest<any>,
       next: HttpHandler
@@ -29,9 +38,9 @@ export class ErrorInterceptorService implements HttpInterceptor {
                   } else {
                       // server-side error
                       errorMessage = `Error Status: ${error.status}\nMessage: ${error.message}`;
-                      console.log("ERROR")
-                      this.changeStatus(true);
-                      console.log("ERRORSITO")
+                      if (error.status === 0) {
+                        this.changeStatus(true);
+                      }
                   }
                   return throwError(errorMessage);
               })
@@ -39,10 +48,6 @@ export class ErrorInterceptorService implements HttpInterceptor {
   }
 
   changeStatus(stat: boolean) {
-    this.serverError.next(stat);
-  }
-
-  getStatus() {
-    return this.serverError.asObservable();
+    this.serverChange.next(stat)
   }
 }

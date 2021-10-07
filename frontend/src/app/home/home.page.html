@@ -15,8 +15,13 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+    <div class="container" style="top: 100px;">
+        <small *ngIf="serverStatus"><i class="fas fa-exclamation-triangle"></i><br/></small>
+        <small *ngIf="serverStatus">Server has not started.<br/></small>
+        <small *ngIf="serverStatus">If your server is running, reload the page.</small>
+    </div>
     <div class="container">
-        <strong *ngIf="serverNotStarted">SERVER HAS NOT STARTED</strong>
+
         <strong>Welcome to Gaming Products in Stock!</strong>
         <br/>
         <p>Start by selecting the tabs above.</p>

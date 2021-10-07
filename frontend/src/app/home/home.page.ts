@@ -12,7 +12,8 @@ import { ErrorInterceptorService } from 'app/services/error-interceptor.service'
 export class HomePage implements OnInit {
   public productID: number = 1;
 
-  public serverNotStarted: boolean;
+  public static serverNotStarted: boolean;
+  public serverStatus: boolean;
   public products: Array<GStockProduct> = [];
   public product: GStockProduct = new GStockProduct();
   public updateProduct: GStockProduct = new GStockProduct();
@@ -20,25 +21,20 @@ export class HomePage implements OnInit {
   constructor(
     private router: Router,
     private gstockService: GStockProductService,
-    private errorInterceptorService: ErrorInterceptorService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     (async () => {
       // Do something before delay
-      console.log('before delay')
       this.loadInfo();
-    console.log("LOADINFO");
-
       await this.delay(1000);
-
       // Do something after
-      this.errorInterceptorService.getStatus().subscribe((stat) => {
-        console.log("estado servidor: " + stat)
-        this.serverNotStarted = stat;
-      })
-      console.log('after delay')
-  })();
+      this.serverStatus = HomePage.serverNotStarted;
+    })();
+  }
+
+  public static setServerStatus(stat: boolean) {
+    this.serverNotStarted = stat;
   }
 
   async delay(ms: number) {
